@@ -1,0 +1,30 @@
+As of mid-2025, the Indian economy presents a picture of robust growth and macroeconomic stability, positioning it as one of the fastest-growing major economies in the world. Here is a snapshot of key data points and economic indicators:
+
+### Key Economic Indicators
+
+| Indicator | Value/Rate | Period | Notes |
+| :--- | :--- | :--- | :--- |
+| **GDP Growth (Real)** | **~6.5%** | FY 2024-25 | Projections for FY 2025-26 range from 6.3% to 6.8% by various agencies. |
+| **Nominal GDP** | **₹331.03 lakh crore** | FY 2024-25 | Approximately a threefold increase from ₹106.57 lakh crore in FY 2014-15. |
+| **Retail Inflation (CPI)** | **1.55%** | July 2025 | An eight-year low, primarily due to a contraction in food prices. |
+| **Fiscal Deficit** | **4.8% of GDP** | FY 2024-25 | The government has set a target of 4.4% for the financial year 2025-26. |
+| **Foreign Exchange Reserves**| **~$693.6 billion** | As of August 8, 2025 | Sufficient to cover over 11 months of imports, providing a strong external buffer. |
+| **Unemployment Rate** | **3.2%** | FY 2023-24 | Data from the Periodic Labour Force Survey (PLFS) shows a significant decrease from 6.0% in 2017-18. |
+
+---
+
+### Sectoral Contribution to the Economy
+
+The Indian economy is broadly divided into three sectors, with the services sector being the dominant contributor to the nation's Gross Value Added (GVA).
+
+* **Services Sector:** This is the largest sector, accounting for approximately **53-55%** of India's GVA. It includes a wide range of industries such as IT and software services, financial services, real estate, trade, hotels, transport, and communication. The services sector remains a key driver of economic growth and a major recipient of Foreign Direct Investment (FDI).
+
+* **Industry Sector:** Contributing around **28-31%** to the GVA, this sector is a vital component of the economy. It is composed of manufacturing, construction, mining, and utilities like electricity and gas. The manufacturing sub-sector, in particular, has shown strong growth, bolstered by government initiatives.
+
+* **Agriculture and Allied Sector:** This primary sector contributes approximately **16-18%** to the GVA. While its share in the national income has decreased over time, it remains crucial as it provides employment to a significant portion of the Indian population (around 53%).
+
+### Additional Highlights
+
+* **Exports:** Total exports reached a record **$824.9 billion** in the financial year 2024-25, driven by strong performance in engineering goods, electronics, and pharmaceuticals. Services exports have more than doubled over the last decade.
+* **Foreign Direct Investment (FDI):** Cumulative FDI inflows have crossed the **$1.05 trillion** mark, indicating strong global confidence in the Indian economy. The services sector is the largest recipient of FDI equity inflows.
+* **Capital Markets:** There is a sharp rise in retail investor participation, with the number of investors growing from 4.9 crore in 2019 to 13.2 crore by the end of 2024, reflecting deepening capital markets.

@@ -1,0 +1,24 @@
+pydantic
+python-env
+langchain
+langchain-openai
+langchain-groq
+langchain-core
+langchain-community
+langchain-google-genai
+pypdf
+bs4
+arxiv
+pymupdf
+wikipedia
+langchain_huggingface
+sentence-transformers
+faiss-cpu
+langchain-pinecone
+unstructured[pdf,tesseract]
+# langchain-astradb
+langchain>=0.3.23,<0.4
+langchain-core>=0.3.52,<0.4
+langchain-astradb>=0.6,<0.7
+youtube_search
+langgraph
