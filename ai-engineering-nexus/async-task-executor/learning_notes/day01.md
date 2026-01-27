@@ -26,4 +26,4 @@ It effectively "unblocks" the execution thread.
 
 4. import asyncio -> Importing async library
 
-5. 
+5. from time import time -> time() -> This return current time.

@@ -29,7 +29,7 @@ async def task5():
 async def main():
     print("Starting all tasks concurrently...")
     start_time=time()
-    asyncio.gather(task1(), task2(), task3(), task4(), task5())
+    await asyncio.gather(task1(), task2(), task3(), task4(), task5())
     end_time=time()
     print(f"All tasks completed in {end_time - start_time:.2f} seconds")
 
