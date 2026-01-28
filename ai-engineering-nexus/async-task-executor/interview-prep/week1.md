@@ -103,4 +103,101 @@ public:
 };
 
 ```
+
+---
+
+## Day 2 - Jan 28
+
+### Problem 1: LeetCode 1115 - Print FooBar Alternately
+- **Approach:** I used baton pass approach using baton_pass.wait() and baon_pass.set() approach.
+- **Time Complexity:** O(1)
+- **Key Learning:** Threading and Semaphore in python
+- **Link:** [\[LeetCode link\]](https://leetcode.com/problems/print-foobar-alternately/description/)
+- **Learning:**
+1. Used baton pass approach in loop for executing loops alternatively.
+2. Lock/Semaphore approach
+
+- **Code Examples:**
+```python
+
+class FooBar:
+    def __init__(self, n):
+        self.n = n
+        self.thread_1 = threading.Event()
+        self.thread_2 = threading.Event()
+        self.thread_1.set()
+
+    def foo(self, printFoo: 'Callable[[], None]') -> None:
+        
+        for i in range(self.n):
+            self.thread_1.wait()
+            # printFoo() outputs "foo". Do not change or remove this line.
+            printFoo()
+            self.thread_2.set()
+            self.thread_1.clear()
+
+    def bar(self, printBar: 'Callable[[], None]') -> None:
+        
+        for i in range(self.n):
+            self.thread_2.wait()
+            # printBar() outputs "bar". Do not change or remove this line.
+            printBar()
+            self.thread_1.set()
+            self.thread_2.clear()
+
+```
+
+```python
+
+from threading import Lock
+class FooBar:
+    def __init__(self, n):
+        self.n = n
+        self.l1 = Lock() # Semaphore(1)
+        self.l2 = Lock() # Semaphore(1)
+        self.l2.acquire()
+
+    def foo(self, printFoo: 'Callable[[], None]') -> None:
+        for i in range(self.n):
+            self.l1.acquire()
+            printFoo()
+            self.l2.release()
+
+    def bar(self, printBar: 'Callable[[], None]') -> None:
+        for i in range(self.n):
+            self.l2.acquire()
+            printBar()
+            self.l1.release()
+
+```
+
+### Problem 2: LeetCode 238. Product of Array Except Self
+- **Approach:** Storing prefix products in output array and sufix products in one variable.
+- **Time Complexity:** O(n)
+- **Time Complexity:** O(1)
+- **Key Learning:** Manipulating arrays for prefix and suffix storing.
+- **Link:** [\[LeetCode link\]](https://leetcode.com/problems/product-of-array-except-self/description/)
+
+- **Code Examples:**
+```CPP
+
+class Solution {
+public:
+    vector<int> productExceptSelf(vector<int>& nums) {
+        vector<int> r(nums.size(), 1);
+        int t=1;
+        for(int i=1;i<nums.size();i++){
+            r[i]=r[i-1]*nums[i-1];
+        }
+        for(int i=nums.size()-2;i>=0;i--){
+            t*=nums[i+1];
+            r[i]=r[i]*t;
+        }
+        return r;
+    }
+};
+
+
+```
+
 ---
