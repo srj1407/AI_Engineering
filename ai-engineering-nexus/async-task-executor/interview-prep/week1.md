@@ -201,3 +201,93 @@ public:
 ```
 
 ---
+
+## Day 3 - Jan 29
+
+### Problem 1: LeetCode 1116 - Print Zero Even Odd
+- **Approach:** I used semaphore lock method with three locks for zero, even and odd.
+- **Time Complexity:** O(n)
+- **Key Learning:** Threading and Semaphore in python
+- **Link:** [\[LeetCode link\]](https://leetcode.com/problems/print-zero-even-odd/description/)
+- **Code Examples:**
+```python
+
+from threading import Lock
+
+class ZeroEvenOdd:
+    def __init__(self, n):
+        self.n = n
+        self.z = Lock()
+        self.e = Lock()
+        self.o = Lock()
+        self.e.acquire()
+        self.o.acquire()
+        
+	# printNumber(x) outputs "x", where x is an integer.
+    def zero(self, printNumber: 'Callable[[int], None]') -> None:
+        for i in range(self.n):
+            self.z.acquire()
+            printNumber(0)
+            if i % 2 == 0:
+                self.o.release()
+            else:
+                self.e.release()
+        
+    def even(self, printNumber: 'Callable[[int], None]') -> None:
+        for i in range(2, self.n+1, 2):
+            self.e.acquire()
+            printNumber(i)
+            self.z.release()
+        
+    def odd(self, printNumber: 'Callable[[int], None]') -> None:
+        for i in range(1, self.n+1, 2):
+            self.o.acquire()
+            printNumber(i)
+            self.z.release()
+
+```
+
+### Problem 2: LeetCode 207 - Course Schedule
+- **Approach:** Solving if all courses can be covered using indegree and queue.
+- **Time Complexity:** Time complexity: O(V+E)
+Processes every course (V) and every prerequisite (E) once.
+- **Key Learning:** Think like this -> By taking indegree count first we are knowing how many individual islands are there. Then in each island we are going one by one using queue subtracting one from indegree when a prerequisite is covered.
+- **Link:** [\[LeetCode link\]](https://leetcode.com/problems/course-schedule/description/)
+
+- **Code Examples:**
+```CPP
+
+class Solution {
+public:
+    bool canFinish(int numCourses, vector<vector<int>>& prerequisites) {
+        vector<int> graph[2000];
+        vector<int> indeg(numCourses, 0);
+        int r=0;
+        for(auto e: prerequisites){
+            graph[e[1]].push_back(e[0]);
+            indeg[e[0]]++;
+        }
+        queue<int> q;
+        for(int i=0;i<numCourses;i++){
+            if(indeg[i]==0){
+                q.push(i);
+            }
+        }
+        while(!q.empty()){
+            int x=q.front();
+            q.pop();
+            r++;
+            for(auto e: graph[x]){
+                indeg[e]--;
+                if(indeg[e]==0){
+                    q.push(e);
+                }
+            }
+        }
+        return r==numCourses;
+    }
+};
+
+```
+
+---
