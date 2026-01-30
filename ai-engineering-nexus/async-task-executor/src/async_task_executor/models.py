@@ -37,4 +37,4 @@ class ExecutionReport:
                 f"Total Tasks: {self.total_tasks}\n"
                 f"Successful: {self.successful_count}\n"
                 f"Failed: {self.failed_count}\n"
-                f"Success Rate: {self.successful_count / self.total_tasks * 100:.2f}%")
+                f"Success Rate: {self.successful_count / self.total_tasks * 100:.2f}%") 
