@@ -291,3 +291,105 @@ public:
 ```
 
 ---
+
+## Day 4 - Jan 30
+
+### Problem 1: LeetCode 200 - Number of Islands
+- **Approach:** I used dfs with track of all visited cells.
+- **Time Complexity:** O(m*n)
+- **Key Learning:** DFS and connected components
+- **Link:** [\[LeetCode link\]](https://leetcode.com/problems/number-of-islands/description/)
+- **Code Examples:**
+```CPP
+
+class Solution {
+public:
+    bool isLand(vector<vector<char>>& grid, int i, int j){
+        int r=grid.size();
+        int c=grid[0].size();
+        if(i>=0 && i<r && j>=0 && j<c && grid[i][j] == '1'){
+            return true;
+        }
+        return false;
+    }
+    void coverIsland(vector<vector<char>>& grid, int i, int j){
+        grid[i][j]='2';
+        if(isLand(grid, i+1, j)){
+            coverIsland(grid, i+1, j);
+        }
+        if(isLand(grid, i-1, j)){
+            coverIsland(grid, i-1, j);
+        }
+        if(isLand(grid, i, j+1)){
+            coverIsland(grid, i, j+1);
+        }
+        if(isLand(grid, i, j-1)){
+            coverIsland(grid, i, j-1);
+        }
+    }
+    int numIslands(vector<vector<char>>& grid) {
+        int r=grid.size();
+        int c=grid[0].size();
+        int f=0;
+        for(int i=0;i<r;i++){
+            for(int j=0;j<c;j++){
+                if(isLand(grid, i, j)){
+                    f++;
+                    coverIsland(grid, i, j);
+                }
+            }
+            cout<<endl;
+        }
+        return f;
+    }
+};
+
+```
+
+```CPP
+
+class Solution {
+public:
+    bool isLand(vector<vector<char>>& grid, int i, int j){
+        int r=grid.size();
+        int c=grid[0].size();
+        if(i>=0 && i<r && j>=0 && j<c && grid[i][j] == '1'){
+            return true;
+        }
+        return false;
+    }
+    void coverIsland(vector<vector<char>>& grid, int i, int j){
+        grid[i][j]='2';
+        if(isLand(grid, i+1, j)){
+            coverIsland(grid, i+1, j);
+        }
+        if(isLand(grid, i-1, j)){
+            coverIsland(grid, i-1, j);
+        }
+        if(isLand(grid, i, j+1)){
+            coverIsland(grid, i, j+1);
+        }
+        if(isLand(grid, i, j-1)){
+            coverIsland(grid, i, j-1);
+        }
+    }
+    int numIslands(vector<vector<char>>& grid) {
+        int r=grid.size();
+        int c=grid[0].size();
+        int f=0;
+        for(int i=0;i<r;i++){
+            for(int j=0;j<c;j++){
+                if(isLand(grid, i, j)){
+                    f++;
+                    coverIsland(grid, i, j);
+                }
+            }
+            cout<<endl;
+        }
+        return f;
+    }
+};
+
+```
+
+---

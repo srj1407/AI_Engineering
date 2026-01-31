@@ -97,3 +97,5 @@ if __name__ == "__main__":
 3. A failed task does not return anything and the lines after failing await task.execute line will not run. You can just use exception handling and return exception message.
 
 4. assert can be used for testing and returning test results.
+
+5. We need to use this - @pytest.mark.asyncio before a async function which is being used for testing by pytest.

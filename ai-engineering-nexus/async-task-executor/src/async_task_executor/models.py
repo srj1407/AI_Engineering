@@ -8,8 +8,9 @@ class Task:
     func: Callable
     args: tuple = ()
     kwargs: Dict[str, Any] = None
-    timeout: float = 30.0
+    timeout: float = 3.0
     retry: int = 3
+    backoff_factor: float = 0.5
 
 @dataclass  
 class TaskResult:

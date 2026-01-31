@@ -1,19 +1,32 @@
 import asyncio
 import pytest
-from src.async_task_executor.executor import AsyncTaskExecutor
-from src.async_task_executor.models import Task
+from async_task_executor.executor import AsyncTaskExecutor
+from async_task_executor.models import Task
+
+attempt_count = 0
 
 async def success_task(i):
-      await asyncio.sleep(i)
-      return "success"
+      await asyncio.sleep(0.5)
+      return "Success"
   
 async def failure_task(i):
-    await asyncio.sleep(i)
-    raise ValueError("intentional failure")
+    await asyncio.sleep(0.5)
+    raise ValueError("Intentional failure")
 
 async def long_task():
     await asyncio.sleep(1)
-    return "success"
+    return "Success"
+
+async def very_long_task():
+    await asyncio.sleep(5)
+    return "Success"
+
+async def flaky_task():
+    global attempt_count
+    attempt_count += 1
+    if attempt_count < 3:
+        raise ValueError("Flaky failure")
+    return "Success" 
 
 @pytest.mark.asyncio
 async def test_all_success():
@@ -71,7 +84,61 @@ async def test_concurrency_limit():
     # Assert: Takes ~3 seconds (not 5 and not 1)
     assert 3 <= time < 4
 
+@pytest.mark.asyncio
+async def test_empty_task_list():
+    executor = AsyncTaskExecutor(max_concurrent=2)
+    report = await executor.run([])
+    assert report.total_tasks == 0
+
+@pytest.mark.asyncio
+async def test_no_resource_leaks():
+    """Verify all tasks are cleaned up"""
+
+    executor = AsyncTaskExecutor(max_concurrent=3)
+    tasks = [Task(func=success_task) for _ in range(3)]
+    tasks = [Task(func=failure_task) for _ in range(3)]
+
+    await executor.run(tasks)
+    
+    # Check no pending tasks remain
+    pending = asyncio.all_tasks()
+    assert len(pending) == 1  # Only main task should remain
+
+@pytest.mark.asyncio
+async def test_timeout_enforcement():
+    """Test that tasks exceeding timeout are killed"""
+
+    executor = AsyncTaskExecutor(max_concurrent=2)
+    tasks = [Task(func=very_long_task, timeout=1.0)]
+    executor_report = await executor.run(tasks)
+    assert executor_report.results[0].error == "TimeoutError"
+
+@pytest.mark.asyncio
+async def test_retry_success():
+    """Test that flaky tasks eventually succeed with retries"""
+
+    executor = AsyncTaskExecutor(max_concurrent=2)
+    tasks = [Task(func=flaky_task, retry=3)]
+    executor_report = await executor.run(tasks)
+    assert executor_report.results[0].success is True
+    assert executor_report.results[0].attempt_count == 3
+
+@pytest.mark.asyncio
+async def test_exponential_backoff():
+    """Test that backoff timing is correct"""
+    
+    executor = AsyncTaskExecutor(max_concurrent=2)
+    tasks = [Task(func=failure_task, retry=3, backoff_factor=2)]
+    executor_report = await executor.run(tasks)
+    total_time = executor_report.results[0].execution_time
+    assert 13 <= total_time <= 15
+
 if __name__ == "__main__":
     asyncio.run(test_all_success())
     asyncio.run(test_partial_failure())
     asyncio.run(test_concurrency_limit())
+    asyncio.run(test_empty_task_list())
+    asyncio.run(test_no_resource_leaks())
+    asyncio.run(test_timeout_enforcement())
+    asyncio.run(test_retry_success())
+    asyncio.run(test_exponential_backoff())
