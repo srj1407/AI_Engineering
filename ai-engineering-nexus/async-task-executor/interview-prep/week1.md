@@ -393,3 +393,86 @@ public:
 ```
 
 ---
+
+## Day 5 - Jan 31
+
+### Problem 1: LeetCode 139 - Word Break
+- **Approach:** Used DP and recursion. Called a function with a beginning index. That function checks if from that beginning index it is possible to break word. That function calls itself.
+- **Time Complexity:** O(n**3)
+- **Space Complexity:** O(n)
+- **Key Learning:** DP
+- **Link:** [\[LeetCode link\]](https://leetcode.com/problems/word-break/description/)
+- **Code Examples:**
+
+
+```CPP
+
+class Solution {
+public:
+    bool isWord(string s, vector<string>& wordDict, int b, int e){
+        string t=s.substr(b, e-b+1);
+        for(auto e:wordDict){
+            if(e==t){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    bool isPossible(string s, vector<string>& wordDict, int b, int n, vector<int> &v){
+        if(b==n){
+            return true;
+        }
+        if(v[b]!=-1){
+            return v[b]==1;
+        }
+        bool r=false;
+        for(int i=b;i<n;i++){
+            if(isWord(s, wordDict, b, i) && isPossible(s, wordDict, i+1, n, v)){
+                r=true;
+            }
+        }
+        if(r){
+            v[b]=1;
+        }
+        else{
+            v[b]=0;
+        }
+        return r;
+    }
+
+    bool wordBreak(string s, vector<string>& wordDict) {
+        int n=s.size();
+        vector<int> v(n, -1);
+        return isPossible(s, wordDict, 0, n, v);
+    }
+};
+
+```
+
+### Problem 2: LeetCode 70 - Climbing Stairs
+- **Approach:** Used bottopm up DP. Used an array which checks its previous indexes.
+- **Time Complexity:** O(n)
+- **Space Complexity:** O(n)
+- **Key Learning:** DP
+- **Link:** [\[LeetCode link\]](https://leetcode.com/problems/climbing-stairs/)
+- **Code Examples:**
+
+```CPP
+
+class Solution {
+public:
+    int climbStairs(int n) {
+        vector<int> v(n+1, 0);
+        v[0]=1;
+        v[1]=1;
+        for(int i=2;i<=n;i++){
+            v[i]=v[i-1]+v[i-2];
+        }
+        return v[n];
+    }
+};
+
+```
+
+---

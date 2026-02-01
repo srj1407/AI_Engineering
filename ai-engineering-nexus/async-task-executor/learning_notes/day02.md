@@ -45,6 +45,26 @@ Guaranteed Release: Even if the code inside the block raises an error or crashes
 
 Safety: This prevents "deadlocks" where slots are accidentally left "occupied" forever.
 
+```python
+
+self._sem = asyncio.Semaphore(max_concurrent)  # max_concurrent=5
+async with self._sem:
+    # Only 5 tasks can be inside this block at the same time
+    # Task 6 waits until one of the first 5 completes
+
+```
+
+All tasks run on a single thread even with max_concurrent=5.
+
+Here's why:
+
+Single-threaded async model:
+
+Python's asyncio runs on ONE thread
+The semaphore doesn't create new threads, it just limits how many coroutines can run concurrently on that single thread
+When a task hits await, it yields control to let other tasks run on the same thread
+Visual example with
+
 3. Why use Dataclasses vs. Regular Classes? 📦
 Dataclasses (introduced in Python 3.7) are designed specifically for objects that primarily store data.
 
