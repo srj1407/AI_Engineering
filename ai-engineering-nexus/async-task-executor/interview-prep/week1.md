@@ -476,3 +476,80 @@ public:
 ```
 
 ---
+
+## Day 5 - Jan 31
+
+### Problem 1: LeetCode 300 - Longest Increasing Subsequence
+- **Approach:** 
+- Approach 1: Used DP to store LIS for every index. And used two loops, first to iterate and second to find max length for every index.
+- Approach 2: Used binary search.
+- **Time Complexity:** O(n**2) and O(nlogn)
+- **Space Complexity:** O(n)
+- **Key Learning:** DP and Binary Search
+- **Link:** [\[LeetCode link\]](https://leetcode.com/problems/longest-increasing-subsequence/description/)
+- **Code Examples:**
+
+Explanation for this approach -> https://leetcode.com/problems/longest-increasing-subsequence/solutions/6092590/video-keep-elements-in-ascending-order-b-m5w0/
+
+```CPP
+
+class Solution {
+public:
+    int find(vector<int> &v, int n){
+        int s=0;
+        int e=v.size()-1;
+        while(s<=e){
+            int m=(s+e)/2;
+            if(v[m]==n){
+                return m;
+            }
+            else if(v[m]>n){
+                e=m-1;
+            }
+            else{
+                s=m+1;
+            }
+        }
+        return s;
+    }
+
+    int lengthOfLIS(vector<int>& nums) {
+        vector<int> v;
+        for(int i=0;i<nums.size();i++){
+            if(v.empty() || v.back() < nums[i]){
+                v.push_back(nums[i]);
+            }
+            else{
+                int x=find(v, nums[i]);
+                v[x]=nums[i];
+            }
+        }
+        return v.size();
+    }
+};
+
+```
+
+```CPP
+
+class Solution {
+public:
+    int lengthOfLIS(vector<int>& nums) {
+        int n=nums.size();
+        vector<int> v(n,1);
+        int r=1;
+        for(int i=1;i<n;i++){
+            for(int j=i-1;j>=0;j--){
+                if(nums[j] < nums[i]){
+                    v[i]=max(v[i], v[j]+1);
+                    r=max(r, v[i]);
+                }
+            }
+        }
+        return r;
+    }
+};
+
+```
+
+---
