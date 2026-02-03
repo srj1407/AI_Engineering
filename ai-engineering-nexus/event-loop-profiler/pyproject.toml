@@ -1,0 +1,25 @@
+[project]
+name = "event-loop-profiler"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "srj1407", email = "shashwatraj1407@gmail.com" }
+]
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi>=0.128.0",
+    "pytest>=9.0.2",
+    "pytest-asyncio>=1.3.0",
+    "uvicorn>=0.40.0",
+]
+
+[build-system]
+requires = ["uv_build>=0.9.27,<0.10.0"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "black>=26.1.0",
+    "mypy>=1.19.1",
+]
