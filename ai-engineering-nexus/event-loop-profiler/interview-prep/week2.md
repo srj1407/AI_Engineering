@@ -85,3 +85,93 @@ public:
 ```
 
 ---
+
+# Week 2 Interview Prep
+
+## Day 2 - Feb 3
+
+### Problem 1: LeetCode 226 - Invert Binary Tree
+- **Approach:** [Recursion]
+- **Time Complexity:** O(n)(O(number of nodes))
+- **Space Complexity:** O(h)(O(height of tree))
+- **Key Learning:** [Assigning tree as recursion result.]
+- **Link:** https://leetcode.com/problems/invert-binary-tree/
+
+```CPP
+
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution {
+public:
+    TreeNode* invertTree(TreeNode* root) {
+        if(root){
+            TreeNode* t=root->left;
+            root->left=invertTree(root->right);
+            root->right=invertTree(t);
+            return root;
+        }
+        return root;
+    }
+};
+
+```
+
+### Problem 2: LeetCode 617 - Merge Two Binary Trees
+
+- **Approach:** [Recursively checking every node]
+- **Time Complexity:** O(n)
+- **Space Complexity:** O(h)
+- **Key Learning:** [Merging for every node using recursive calling.        ]
+- **Link:** https://leetcode.com/problems/merge-two-binary-trees/description/
+
+```CPP
+
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution {
+public:
+    TreeNode* mergeTrees(TreeNode* root1, TreeNode* root2) {
+        TreeNode* f=new TreeNode();
+        if(root1 && root2){
+            f->val=root1->val+root2->val;
+            f->left=mergeTrees(root1->left, root2->left);
+            f->right=mergeTrees(root1->right, root2->right);
+            return f;
+        }
+        else if(root1){
+            f->val=root1->val;
+            f->left=root1->left;
+            f->right=root1->right;
+            return f;
+        }
+        else if(root2){
+            f->val=root2->val;
+            f->left=root2->left;
+            f->right=root2->right;
+            return f;
+        }
+        return nullptr;
+    }
+};
+
+```
+
+---
