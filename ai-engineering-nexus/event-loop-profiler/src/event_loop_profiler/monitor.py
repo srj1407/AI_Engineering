@@ -1,7 +1,8 @@
 import asyncio
 import time
 from typing import Callable, List
-from .models import TaskExecution, ExecutionTimeline
+from .models import TaskExecution, ExecutionTimeline, BlockingDetection, BlockingReport
+from .blocking_detector import BlockingDetector
 
 class EventLoopMonitor:
     """
@@ -64,7 +65,39 @@ class EventLoopMonitor:
         executionTimeline = ExecutionTimeline(executions = self.executions, total_duration = duration)
 
         return executionTimeline
-
-
     
+async def run_with_full_analysis(
+    self,
+    tasks: List[Callable],
+    task_names: List[str] = None,
+    detect_blocking: bool = True
+) -> tuple[ExecutionTimeline, BlockingReport]:
+    """
+    Run tasks with both timing and blocking detection.
     
+    Returns:
+        (timeline, blocking_report)
+    """
+    # Your implementation
+    # Should run tasks with monitoring AND blocking detection
+
+    if task_names is None:
+            task_names = [f'Task: {i}' for i in ramge(len(tasks))]
+        
+    self._start_time = time.perf_counter()
+
+    wrapped_tasks = [self._wrap_task(tasks[i], task_names[i]) for i in range(len(task_names))]
+
+    if detect_blocking:
+        detector = BlockingDetector()
+        report, timeline = detector.run_with_detection(asyncio.gather(*wrapped_tasks))
+
+    self.executions = await asyncio.gather(*wrapped_tasks)
+    
+    end_time = time.perf_counter()
+
+    duration = end_time - self._start_time
+
+    executionTimeline = ExecutionTimeline(executions = self.executions, total_duration = duration)
+
+    return executionTimeline
