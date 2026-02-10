@@ -1,23 +1,12 @@
 import asyncio
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from fastapi.responses import HTMLResponse
-import os
-from dotenv import load_dotenv
-from openai import OpenAI, AsyncOpenAI
 import json
-
-load_dotenv(r'C:\Users\SRJ\SRJ\Work\agentic_ai\.env')
+from models import get_model_stream
+import logging
+logger = logging.getLogger("uvicorn") # Hooks into FastAPI's default logger
 
 app = FastAPI()
-
-gemini_api_key = os.getenv('GOOGLE_API_KEY')
-
-openai = AsyncOpenAI(
-    api_key=gemini_api_key,
-    base_url="https://generativelanguage.googleapis.com/v1beta/openai/"
-)
-
-model="gemini-2.5-flash"
 
 # This is just a simple UI to test your websocket
 html = """
@@ -29,7 +18,6 @@ html = """
         <button onclick="sendMessage()">Send</button>
         <ul id='messages'></ul>
         <script>
-            let currentMessageElement;
             var ws = new WebSocket("ws://localhost:8000/ws");
             ws.onmessage = function(event) {
                 var messages = document.getElementById('messages')
@@ -38,6 +26,11 @@ html = """
                     // Create the new list item once
                     currentMessageElement = document.createElement('li');
                     messages.appendChild(currentMessageElement);
+                } else if(msg.type === "thinking"){
+                    // Append text to the SAME list item
+                    currentMessageElement = document.createElement('li');
+                    messages.appendChild(currentMessageElement);
+                    currentMessageElement.textContent += msg.data;
                 } else {
                     // Append text to the SAME list item
                     currentMessageElement.textContent += msg.data;
@@ -61,32 +54,23 @@ async def get():
 @app.websocket("/ws")
 async def websocket_endpoint(websocket: WebSocket):
     await websocket.accept()
+    # Instead of print()
+    logger.info("New connection established")
     try:
         while True:
             question = await websocket.receive_text()
             try:
-                await websocket.send_json({"type": "thinking", "data": "Thinking..."})
-                response = await openai.chat.completions.create(
-                    model=model,
-                    messages=[
-                        {   "role": "system",
-                            "content": "You are a helpful assistant."
-                        },
-                        {
-                            "role": "user",
-                            "content": f"Answer this question: {question}"
-                        }
-                    ],
-                    stream = True
-                )
+                question_dict = json.loads(question)
+                model = question_dict['model']
+                question = question_dict['question']
+            except json.JSONDecodeError:
+                model = "gemini-2.5-flash"
+                question = question
+            try:
                 await websocket.send_json({"type": "start"})
-                async for chunk in response:
-                    content = chunk.choices[0].delta.content
-                    if content:
-                        await websocket.send_json({"type": "content", "data": content})
+                async for token in get_model_stream(model, question):
+                    await websocket.send_json({"type": "content", "data": token})
             except Exception as e:
                 await websocket.send_json({"type": "error", "data": "AI is sleepy. Try again!"})
-
-
     except WebSocketDisconnect:
-        print('Client disconnected')
+        logger.error(f"Client Disconnected!")
